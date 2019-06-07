@@ -7,7 +7,10 @@ pipeline {
     stages {
         stage("Stop Container"){
             steps{
-                sh('sudo docker stop cameras')
+                sh('''
+                    sudo docker stop cameras
+                    sudo docker rm cameras    
+                ''')
             }
         }
         stage("Build Docker Container"){
