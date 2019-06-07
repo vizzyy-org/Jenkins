@@ -1,14 +1,17 @@
 #! groovy
 
+currentBuild.displayName = "Cameras Pipeline [ " + currentBuild.number + " ]"
+
 pipeline {
     agent any
     stages {
         stage("Build Docker Container"){
             steps{
                 script{
+
                     sh ('''
                         cd /home/barney/docker/cameras
-                        docker build -t=cameras
+                        docker build -t=cameras .
                     ''')
                 }
             }
