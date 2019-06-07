@@ -12,7 +12,7 @@ pipeline {
                     sh ('''
                         echo $USER
                         cd /home/barney/docker/cameras
-                        docker build -t=cameras .
+                        sudo docker build -t=cameras .
                     ''')
                 }
             }
