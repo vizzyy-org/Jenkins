@@ -15,6 +15,10 @@ pipeline {
         }
         stage("Build Docker Container"){
             steps{
+                checkout([
+                        $class: 'GitSCM', branches: [[name: '*/master']],
+                        userRemoteConfigs: [[url: 'git@github.com:Vizzyy/cameras.git',credentialsId:'d9ece77a-be20-4450-93dc-d86862497dfc']]
+                ])
                 sh ('''
                     cd /home/barney/docker/cameras
                     sudo docker build -t=cameras .
