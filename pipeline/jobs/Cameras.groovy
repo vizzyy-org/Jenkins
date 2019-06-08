@@ -8,7 +8,7 @@ pipeline {
         stage("Stop Container"){
             steps{
                 script {
-                    if (env.DEPLOY) {
+                    if (env.Deploy == true) {
                         sh('''
                             sudo docker stop cameras
                             sudo docker rm cameras    
@@ -23,8 +23,8 @@ pipeline {
                         $class: 'GitSCM', branches: [[name: '*/master']],
                         userRemoteConfigs: [[url: 'git@github.com:Vizzyy/cameras.git',credentialsId:'d9ece77a-be20-4450-93dc-d86862497dfc']]
                 ])
+                //cd /home/barney/docker/cameras
                 sh ('''
-                    cd /home/barney/docker/cameras
                     sudo docker build -t=cameras .
                 ''')
             }
@@ -32,7 +32,7 @@ pipeline {
         stage("Deploy Docker Container"){
             steps{
                 script {
-                    if (env.DEPLOY) {
+                    if (env.Deploy == true) {
                         sh('sudo docker run -d -p 80:6000 --name cameras cameras')
                     }
                 }
