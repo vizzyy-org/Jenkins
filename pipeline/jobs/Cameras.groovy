@@ -8,6 +8,7 @@ pipeline {
         stage("Stop Container"){
             steps{
                 script {
+                    echo env.Deploy
                     if (env.Deploy == true) {
                         sh('''
                             sudo docker stop cameras
