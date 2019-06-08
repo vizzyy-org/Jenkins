@@ -27,7 +27,8 @@ pipeline {
         }
         stage("Deploy Docker Container"){
             steps{
-                sh('sudo docker run -d -p 80:6000 --name cameras cameras')
+                if (env.Deploy)
+                    sh('sudo docker run -d -p 80:6000 --name cameras cameras')
             }
         }
     }
