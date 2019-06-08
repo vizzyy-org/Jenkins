@@ -9,7 +9,7 @@ pipeline {
             steps{
                 script {
                     echo env.Deploy
-                    if (env.Deploy == true) {
+                    if (env.Deploy == "true") {
                         sh('''
                             sudo docker stop cameras
                             sudo docker rm cameras    
@@ -33,7 +33,7 @@ pipeline {
         stage("Deploy Docker Container"){
             steps{
                 script {
-                    if (env.Deploy == true) {
+                    if (env.Deploy == "true") {
                         sh('sudo docker run -d -p 80:6000 --name cameras cameras')
                     }
                 }
