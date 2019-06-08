@@ -16,7 +16,7 @@ pipeline {
                         }
                 }
             }
-        } 
+        }
         stage("Build Docker Container"){
             steps{
                 checkout([
