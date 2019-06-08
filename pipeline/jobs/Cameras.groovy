@@ -8,7 +8,6 @@ pipeline {
         stage("Stop Container"){
             steps{
                 script {
-                    echo env.Deploy
                     if (env.Deploy == "true") {
                         sh('''
                             sudo docker stop cameras
@@ -24,9 +23,7 @@ pipeline {
                         $class: 'GitSCM', branches: [[name: '*/master']],
                         userRemoteConfigs: [[url: 'git@github.com:Vizzyy/cameras.git',credentialsId:'d9ece77a-be20-4450-93dc-d86862497dfc']]
                 ])
-                sh ('''
-                    sudo docker build -t=cameras .
-                ''')
+                sh ('sudo docker build -t=cameras .')
             }
         }
         stage("Deploy Docker Container"){
