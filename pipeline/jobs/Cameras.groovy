@@ -35,14 +35,14 @@ pipeline {
                     if (env.Deploy == "true") {
                         withCredentials([string(credentialsId: 'VOX_KEY', variable: 'vox_key'),
                                          string(credentialsId: 'OCULUS_KEY', variable: 'oculus_key')]) {
-                            sh("""
+                            sh('''
                                 sudo docker run -d \
                                 -p 80:6000 \
                                 --name cameras \
                                 -e VOX_KEY=$vox_key \
                                 -e OCULUS_KEY=$oculus_key \
                                 cameras
-                            """)
+                            ''')
                         }
 
                     }
