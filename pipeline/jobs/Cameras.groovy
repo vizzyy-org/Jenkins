@@ -7,10 +7,12 @@ pipeline {
     stages {
         stage("Stop Container"){
             steps{
-                sh('''
-                    sudo docker stop cameras
-                    sudo docker rm cameras    
-                ''')
+                if(env.DEPLOY) {
+                    sh('''
+                        sudo docker stop cameras
+                        sudo docker rm cameras    
+                    ''')
+                }
             }
         }
         stage("Build Docker Container"){
@@ -27,8 +29,9 @@ pipeline {
         }
         stage("Deploy Docker Container"){
             steps{
-                if (env.Deploy)
+                if(env.DEPLOY) {
                     sh('sudo docker run -d -p 80:6000 --name cameras cameras')
+                }
             }
         }
     }
