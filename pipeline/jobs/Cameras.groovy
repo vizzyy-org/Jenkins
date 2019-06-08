@@ -24,7 +24,6 @@ pipeline {
                         $class: 'GitSCM', branches: [[name: '*/master']],
                         userRemoteConfigs: [[url: 'git@github.com:Vizzyy/cameras.git',credentialsId:'d9ece77a-be20-4450-93dc-d86862497dfc']]
                 ])
-                //cd /home/barney/docker/cameras
                 sh ('''
                     sudo docker build -t=cameras .
                 ''')
@@ -34,7 +33,18 @@ pipeline {
             steps{
                 script {
                     if (env.Deploy == "true") {
-                        sh('sudo docker run -d -p 80:6000 --name cameras cameras')
+                        withCredentials([string(credentialsId: 'VOX_KEY', variable: 'vox_key'),
+                                         string(credentialsId: 'OCULUS_KEY', variable: 'oculus_key')]) {
+                            sh("""
+                                sudo docker run -d \
+                                -p 80:6000 \
+                                --name cameras \
+                                -e VOX_KEY=$vox_key \
+                                -e OCULUS_KEY=$oculus_key \
+                                cameras
+                            """)
+                        }
+
                     }
                 }
             }
