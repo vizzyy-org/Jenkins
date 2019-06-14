@@ -3,9 +3,11 @@
 currentBuild.displayName = "Cameras Pipeline [ " + currentBuild.number + " ]"
 
 try {
-    def temp = ISSUE_NUMBER
+    if (ISSUE_NUMBER)
+        echo "Building from pull request..."
 } catch (Exception e) {
     ISSUE_NUMBER = false
+    echo "Building from jenkins job..."
 }
 
 pipeline {
