@@ -8,7 +8,7 @@ pipeline {
         stage("Acknowledge") {
             steps {
                 script {
-                    if(env.Build == "true" && ISSUE_NUMBER) {
+                    if(env.Build == "true" && ISSUE_NUMBER != "empty") {
                         prTools.comment(ISSUE_NUMBER, """{"body": "Jenkins triggered $currentBuild.displayName"}""")
                     }
                 }
@@ -75,7 +75,7 @@ pipeline {
     post {
         success {
             script {
-                if(env.Build == "true" && ISSUE_NUMBER) {
+                if(env.Build == "true" && ISSUE_NUMBER != "empty") {
                     prTools.merge(ISSUE_NUMBER, """{"commit_title": "Jenkins merged $currentBuild.displayName","merge_method": "merge"}""")
                     prTools.comment(ISSUE_NUMBER, """{"body": "Jenkins successfully deployed $currentBuild.displayName"}""")
                 }
@@ -83,7 +83,7 @@ pipeline {
         }
         failure {
             script {
-                if(env.Build == "true" && ISSUE_NUMBER) {
+                if(env.Build == "true" && ISSUE_NUMBER != "empty") {
                     prTools.comment(ISSUE_NUMBER, """{"body": "Jenkins failed during $currentBuild.displayName"}""")
                 }
             }
