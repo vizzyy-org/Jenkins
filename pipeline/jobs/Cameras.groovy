@@ -9,16 +9,7 @@ pipeline {
             steps {
                 script {
                     if(env.Build == "true") {
-                        // POST /repos/:owner/:repo/issues/:issue_number/comments
-                        withCredentials([string(credentialsId: 'jenkins-user-api-token', variable: 'TOKEN')]) {
-                            def message = """{"body": "Jenkins triggered $currentBuild.displayName."}"""
-                            httpRequest acceptType: 'APPLICATION_JSON',
-                                    contentType: 'APPLICATION_JSON',
-                                    httpMode: 'POST',
-                                    customHeaders: [[name: 'Authorization', value: "token $TOKEN"]],
-                                    requestBody: message,
-                                    url: "https://api.github.com/repos/vizzyy-org/cameras/issues/$ISSUE_NUMBER/comments"
-                        }
+                        prTools.comment(ISSUE_NUMBER, """{"body": "Jenkins triggered $currentBuild.displayName"}""")
                     }
                 }
             }
@@ -27,12 +18,8 @@ pipeline {
             steps {
                 script {
                     if(env.Build == "true") {
-                        checkout([
-                                $class           : 'GitSCM', branches: [[name: "pr/$ISSUE_NUMBER"]],
-                                userRemoteConfigs: [[url          : 'git@github.com:vizzyy-org/cameras.git',
-                                                     refspec      : '+refs/pull/*/head:refs/remotes/origin/pr/*',
-                                                     credentialsId: 'd9ece77a-be20-4450-93dc-d86862497dfc']]
-                        ])
+                        prTools.checkoutBranch(ISSUE_NUMBER, "vizzyy-org/cameras")
+
                         withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'docker-login',
                                           usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                             sh('''
@@ -91,33 +78,16 @@ pipeline {
     post {
         success {
             script {
-                // PUT /repos/:owner/:repo/pulls/:pull_number/merge
                 if(env.Build == "true") {
-                    withCredentials([string(credentialsId: 'jenkins-user-api-token', variable: 'TOKEN')]) {
-                        def message = """{"commit_title": "Jenkins merged $currentBuild.displayName.","merge_method": "merge"}"""
-                        httpRequest acceptType: 'APPLICATION_JSON',
-                                contentType: 'APPLICATION_JSON',
-                                httpMode: 'PUT',
-                                customHeaders: [[name: 'Authorization', value: "token $TOKEN"]],
-                                requestBody: message,
-                                url: "https://api.github.com/repos/vizzyy-org/cameras/pulls/$ISSUE_NUMBER/merge"
-                    }
-
-                    withCredentials([string(credentialsId: 'jenkins-user-api-token', variable: 'TOKEN')]) {
-                        def message = """{"body": "Jenkins successfully deployed $currentBuild.displayName."}"""
-                        httpRequest acceptType: 'APPLICATION_JSON',
-                                contentType: 'APPLICATION_JSON',
-                                httpMode: 'POST',
-                                customHeaders: [[name: 'Authorization', value: "token $TOKEN"]],
-                                requestBody: message,
-                                url: "https://api.github.com/repos/vizzyy-org/cameras/issues/$ISSUE_NUMBER/comments"
-                    }
+                    prTools.merge(ISSUE_NUMBER, """{"commit_title": "Jenkins merged $currentBuild.displayName","merge_method": "merge"}""")
+                    prTools.comment(ISSUE_NUMBER, """{"body": "Jenkins successfully deployed $currentBuild.displayName"}""")
                 }
             }
         }
         failure {
             script {
                 if(env.Build == "true") {
+                    prTools.comment(ISSUE_NUMBER, """{"body": "Jenkins failed during $currentBuild.displayName"}""")
                     withCredentials([string(credentialsId: 'jenkins-user-api-token', variable: 'TOKEN')]) {
                         def message = """{"body": "Jenkins failed during $currentBuild.displayName!"}"""
                         httpRequest acceptType: 'APPLICATION_JSON',
