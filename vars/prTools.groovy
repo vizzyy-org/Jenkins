@@ -24,14 +24,14 @@ def checkoutBranch(ISSUE_NUMBER, repo){
     if(ISSUE_NUMBER) {
         checkout([
                 $class           : 'GitSCM', branches: [[name: "pr/$ISSUE_NUMBER"]],
-                userRemoteConfigs: [[url          : "git@github.com:"+$repo+".git",
+                userRemoteConfigs: [[url          : "git@github.com:"+repo+".git",
                                      refspec      : '+refs/pull/*/head:refs/remotes/origin/pr/*',
                                      credentialsId: 'd9ece77a-be20-4450-93dc-d86862497dfc']]
         ])
     } else {
         checkout([
                 $class           : 'GitSCM', branches: [[name: "*/master"]],
-                userRemoteConfigs: [[url          : "git@github.com:"+$repo+".git",
+                userRemoteConfigs: [[url          : "git@github.com:"+repo+".git",
                                      credentialsId: 'd9ece77a-be20-4450-93dc-d86862497dfc']]
         ])
     }
