@@ -37,18 +37,15 @@ pipeline {
             steps {
                 script {
                     if (env.Deploy == "true") {
-                        def running
-                        if (env.Deploy == "true") {
-                            try {
-                                sh('sudo docker stop cameras')
-                            } catch (Exception e) {
-                                echo "Could not stop container."
-                            }
-                            try {
-                                sh('sudo docker rm cameras')
-                            } catch (Exception e) {
-                                echo "Could not remove container."
-                            }
+                        try {
+                            sh('sudo docker stop cameras')
+                        } catch (Exception e) {
+                            echo "Could not stop container."
+                        }
+                        try {
+                            sh('sudo docker rm cameras')
+                        } catch (Exception e) {
+                            echo "Could not remove container."
                         }
                     }
                 }
@@ -88,15 +85,6 @@ pipeline {
             script {
                 if(env.Build == "true") {
                     prTools.comment(ISSUE_NUMBER, """{"body": "Jenkins failed during $currentBuild.displayName"}""")
-                    withCredentials([string(credentialsId: 'jenkins-user-api-token', variable: 'TOKEN')]) {
-                        def message = """{"body": "Jenkins failed during $currentBuild.displayName!"}"""
-                        httpRequest acceptType: 'APPLICATION_JSON',
-                                contentType: 'APPLICATION_JSON',
-                                httpMode: 'POST',
-                                customHeaders: [[name: 'Authorization', value: "token $TOKEN"]],
-                                requestBody: message,
-                                url: "https://api.github.com/repos/vizzyy-org/cameras/issues/$ISSUE_NUMBER/comments"
-                    }
                 }
             }
         }
