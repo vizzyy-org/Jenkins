@@ -1,22 +1,22 @@
-def comment(ISSUE_NUMBER, message){
+def comment(ISSUE_NUMBER, message, repo){
     withCredentials([string(credentialsId: 'jenkins-user-api-token', variable: 'TOKEN')]) {
         httpRequest acceptType: 'APPLICATION_JSON',
                 contentType: 'APPLICATION_JSON',
                 httpMode: 'POST',
                 customHeaders: [[name: 'Authorization', value: "token $TOKEN"]],
                 requestBody: message,
-                url: "https://api.github.com/repos/vizzyy-org/cameras/issues/$ISSUE_NUMBER/comments"
+                url: "https://api.github.com/repos/vizzyy-org/$repo/issues/$ISSUE_NUMBER/comments"
     }
 }
 
-def merge(ISSUE_NUMBER, message){
+def merge(ISSUE_NUMBER, message, repo){
     withCredentials([string(credentialsId: 'jenkins-user-api-token', variable: 'TOKEN')]) {
         httpRequest acceptType: 'APPLICATION_JSON',
                 contentType: 'APPLICATION_JSON',
                 httpMode: 'PUT',
                 customHeaders: [[name: 'Authorization', value: "token $TOKEN"]],
                 requestBody: message,
-                url: "https://api.github.com/repos/vizzyy-org/cameras/pulls/$ISSUE_NUMBER/merge"
+                url: "https://api.github.com/repos/vizzyy-org/$repo/pulls/$ISSUE_NUMBER/merge"
     }
 }
 
