@@ -30,7 +30,7 @@ pipeline {
                                 rm $ITEM_NAME
                             """
                     } else {
-                        sh "aws s3 ls $BUCKET_PATH"
+                        sh "aws s3 ls $BUCKET_PATH/"
                     }
                 }
             }
