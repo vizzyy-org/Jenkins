@@ -2,14 +2,6 @@
 
 currentBuild.displayName = "Secrets Pipeline [ " + currentBuild.number + " ]"
 
-//try {
-//    if (ISSUE_NUMBER)
-//        echo "Building from pull request..."
-//} catch (Exception e) {
-//    ISSUE_NUMBER = false
-//    echo "Building from jenkins job..."
-//}
-
 pipeline {
     agent any
     options {
@@ -17,33 +9,43 @@ pipeline {
         disableConcurrentBuilds()
     }
     parameters {
-        string(name: 'BUCKET', defaultValue: 'vizzyy', description: 'S3 bucket to pull from.')
-        string(name: 'ITEM_PATH', defaultValue: '/credentials', description: 'S3 item path.')
+        string(name: 'BUCKET_PATH', defaultValue: 'vizzyy/credentials', description: 'S3 bucket path to pull from.')
+        string(name: 'ITEM_NAME', defaultValue: '', description: 'S3 item name.')
+        string(name: 'NEW_VALUE', defaultValue: '', description: 'New secret value.')
     }
     stages {
-        stage("Acknowledge") {
+        stage("Execute") {
             steps {
                 script {
-                    sh "aws s3 ls"
+                    if(NEW_VALUE != ""){
+                        sh  """
+                                echo $NEW_VALUE > $ITEM_NAME;
+                                aws s3 cp $ITEM_NAME s3://$BUCKET_PATH/$ITEM_NAME
+                                rm $ITEM_NAME
+                            """
+                    } else if (ITEM_NAME != "") {
+                        sh  """
+                                aws s3 cp s3://$BUCKET_PATH/$ITEM_NAME ./$ITEM_NAME
+                                cat $ITEM_NAME
+                                rm $ITEM_NAME
+                            """
+                    } else {
+                        sh "aws s3 ls $BUCKET_PATH"
+                    }
                 }
             }
         }
     }
-//    post {
-//        success {
-//            script {
-//                if(env.Build == "true" && ISSUE_NUMBER) {
-//                    prTools.merge(ISSUE_NUMBER, """{"commit_title": "Jenkins merged $currentBuild.displayName","merge_method": "merge"}""", "mothership")
-//                    prTools.comment(ISSUE_NUMBER, """{"body": "Jenkins successfully deployed $currentBuild.displayName"}""" , "mothership")
-//                }
-//            }
-//        }
-//        failure {
-//            script {
-//                if(env.Build == "true" && ISSUE_NUMBER) {
-//                    prTools.comment(ISSUE_NUMBER, """{"body": "Jenkins failed during $currentBuild.displayName"}""", "mothership")
-//                }
-//            }
-//        }
-//    }
+    post {
+        success {
+            script {
+                sh "echo SUCCESS"
+            }
+        }
+        failure {
+            script {
+                sh "echo FAILURE"
+            }
+        }
+    }
 }
