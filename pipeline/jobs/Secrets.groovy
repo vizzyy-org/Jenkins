@@ -39,7 +39,7 @@ pipeline {
                             sh "aws s3 ls $BUCKET_PATH/"
                         }
                     } catch (Exception ignored){
-                        sh """
+                        sh  """
                                 echo "Oops, didn't work"
                             """
                     }
