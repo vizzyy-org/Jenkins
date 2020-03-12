@@ -18,20 +18,30 @@ pipeline {
         stage("Execute") {
             steps {
                 script {
-                    if(NEW_VALUE != "" && ITEM_NAME != ""){
-                        sh  """
-                                echo $NEW_VALUE > $ITEM_NAME;
-                                aws s3 cp $ITEM_NAME s3://$BUCKET_PATH/$ITEM_NAME
-                                rm $ITEM_NAME
+                    try {
+                        if(BUCKET_PATH != "" && NEW_VALUE != "" && ITEM_NAME != ""){
+                            sh  """
+                                    echo $NEW_VALUE > $ITEM_NAME;
+                                    aws s3 cp $ITEM_NAME s3://$BUCKET_PATH/$ITEM_NAME
+                                    rm $ITEM_NAME
+                                """
+                        } else if (BUCKET_PATH != "" && ITEM_NAME != "" && DELETE_ITEM == "true") {
+                            sh  """
+                                    aws s3 rm s3://$BUCKET_PATH/$ITEM_NAME
+                                """
+                        } else if (BUCKET_PATH != "" && ITEM_NAME != "") {
+                            sh  """
+                                    aws s3 cp s3://$BUCKET_PATH/$ITEM_NAME ./$ITEM_NAME
+                                    cat $ITEM_NAME
+                                    rm $ITEM_NAME
+                                """
+                        } else {
+                            sh "aws s3 ls $BUCKET_PATH/"
+                        }
+                    } catch (Exception ignored){
+                        sh """
+                                echo "Oops, didn't work"
                             """
-                    } else if (ITEM_NAME != "") {
-                        sh  """
-                                aws s3 cp s3://$BUCKET_PATH/$ITEM_NAME ./$ITEM_NAME
-                                cat $ITEM_NAME
-                                rm $ITEM_NAME
-                            """
-                    } else {
-                        sh "aws s3 ls $BUCKET_PATH/"
                     }
                 }
             }
