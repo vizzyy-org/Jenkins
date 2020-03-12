@@ -12,6 +12,7 @@ pipeline {
         string(name: 'BUCKET_PATH', defaultValue: 'vizzyy/credentials', description: 'S3 bucket path to pull from.')
         string(name: 'ITEM_NAME', defaultValue: '', description: 'S3 item name.')
         string(name: 'NEW_VALUE', defaultValue: '', description: 'New secret value.')
+        booleanParam(name: 'DELETE_ITEM', defaultValue: false, description: 'Delete this item?')
     }
     stages {
         stage("Execute") {
