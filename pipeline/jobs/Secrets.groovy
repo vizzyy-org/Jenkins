@@ -17,7 +17,7 @@ pipeline {
         stage("Execute") {
             steps {
                 script {
-                    if(NEW_VALUE != ""){
+                    if(NEW_VALUE != "" && ITEM_NAME != ""){
                         sh  """
                                 echo $NEW_VALUE > $ITEM_NAME;
                                 aws s3 cp $ITEM_NAME s3://$BUCKET_PATH/$ITEM_NAME
