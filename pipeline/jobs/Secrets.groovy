@@ -12,6 +12,14 @@ currentBuild.displayName = "Secrets Pipeline [ " + currentBuild.number + " ]"
 
 pipeline {
     agent any
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'10'))
+        disableConcurrentBuilds()
+    }
+    parameters {
+        string(name: 'BUCKET', defaultValue: 'vizzyy', description: 'S3 bucket to pull from.')
+        string(name: 'ITEM_PATH', defaultValue: '/credentials', description: 'S3 item path.')
+    }
     stages {
         stage("Acknowledge") {
             steps {
