@@ -1,4 +1,7 @@
 #! groovy
+import groovy.json.JsonSlurper
+JsonSlurper slurper = new JsonSlurper()
+
 
 currentBuild.displayName = "DDNS Pipeline [ " + currentBuild.number + " ]"
 
@@ -13,14 +16,12 @@ pipeline {
             steps {
                 script {
 
-                    def ret = sh(script: """aws ec2 create-security-group --group-name SSHgroup --description "Security group defining SSH ingress source IPs" """, returnStdout: true)
+                    String ret = sh(script: """aws ec2 create-security-group --group-name SSHgroup --description "Security group defining SSH ingress source IPs" """, returnStdout: true)
                     echo "$ret"
-                    echo "Returned $ret.GroupId"
+                    Map parsedJson = slurper.parseText(ret)
+                    def securityGroup = parsedJson.GroupId
 
-//                    sh """
-//
-//
-//                    """
+                    sh "aws ec2 delete-security-group --group-id $securityGroup"
 
                 }
             }
