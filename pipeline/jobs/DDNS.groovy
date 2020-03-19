@@ -37,6 +37,10 @@ pipeline {
                 script {
 
                     withCredentials([string(credentialsId: 'mainEC2', variable: 'INSTANCE_ID'), string(credentialsId: 'WebServerSG', variable: 'WEB_SERVER_SG')]) {
+
+                        // Detach from EC2
+                        sh """aws ec2 modify-instance-attribute --instance-id $INSTANCE_ID --groups "$WEB_SERVER_SG" """
+
                         // Delete existing group
                         sh "aws ec2 delete-security-group --group-name SSHgroup"
 
