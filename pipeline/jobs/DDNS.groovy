@@ -12,7 +12,7 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr:'10'))
         disableConcurrentBuilds()
     }
-    triggers{ cron('H/60 * * * *') }
+    triggers{ cron('0 * * * *') }
     stages {
         stage("Grab IP") {
             steps {
