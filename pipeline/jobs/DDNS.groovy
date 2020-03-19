@@ -21,7 +21,7 @@ pipeline {
                         String ret = sh(script: "nslookup $DDNS | grep Address", returnStdout: true)
                         echo "$ret"
 
-                        IP_ADDRESS = ret.split('Address:')[3].trim()
+                        IP_ADDRESS = ret.split('Address:')[2].trim()
 
                         echo "DDNS value: $IP_ADDRESS"
                     }
@@ -35,9 +35,10 @@ pipeline {
             steps {
                 script {
 
+                    // Delete existing group
                     sh "aws ec2 delete-security-group --group-name SSHgroup"
 
-                    // Create a security group
+                    // Create new security group
                     String ret = sh(script: """aws ec2 create-security-group --group-name SSHgroup --description "Security group defining SSH ingress source IPs" """, returnStdout: true)
                     echo "$ret"
                     Map parsedJson = slurper.parseText(ret)
