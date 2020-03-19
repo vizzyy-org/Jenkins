@@ -16,12 +16,16 @@ pipeline {
             steps {
                 script {
 
+                    // Create a security group
                     String ret = sh(script: """aws ec2 create-security-group --group-name SSHgroup --description "Security group defining SSH ingress source IPs" """, returnStdout: true)
                     echo "$ret"
                     Map parsedJson = slurper.parseText(ret)
                     def securityGroup = parsedJson.GroupId
 
-                    sh "aws ec2 delete-security-group --group-id $securityGroup"
+
+
+
+                    sh "aws ec2 delete-security-group --group-name SSHgroup"
 
                 }
             }
