@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
 
-                    def ret = sh(script: """aws ec2 create-security-group --group-name SSHgroup --description "Security group defining SSH ingress source IPs""", returnStdout: true)
+                    def ret = sh(script: """aws ec2 create-security-group --group-name SSHgroup --description "Security group defining SSH ingress source IPs" """, returnStdout: true)
                     echo "$ret"
                     echo "Returned $ret.GroupId"
 
