@@ -21,7 +21,7 @@ pipeline {
                         String ret = sh(script: "nslookup $DDNS | grep Address", returnStdout: true)
                         echo "$ret"
 
-                        IP_ADDRESS = ret.split('Address:')[1]
+                        IP_ADDRESS = ret.split('Address:')[3].trim()
 
                         echo "DDNS value: $IP_ADDRESS"
                     }
