@@ -19,13 +19,14 @@ pipeline {
 
                     withCredentials([string(credentialsId: 'ddns', variable: 'DDNS')]) {
                         String ret = sh(script: "nslookup $DDNS", returnStdout: true)
+                        echo "$ret"
+
+                        IP_ADDRESS = ret.split('Address:')[1]
+
+                        echo "DDNS value: $IP_ADDRESS"
                     }
 
-                    echo "$ret"
 
-                    IP_ADDRESS = ret.split('Address:')[1]
-
-                    echo "DDNS value: $IP_ADDRESS"
                 }
             }
         }
