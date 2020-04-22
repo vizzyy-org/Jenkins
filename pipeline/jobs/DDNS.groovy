@@ -45,13 +45,15 @@ pipeline {
                         sh "aws ec2 delete-security-group --group-name SSHgroup"
 
                         // Create new security group
-                        String ret = sh(script: """aws ec2 create-security-group --group-name SSHgroup --description "Security group defining SSH ingress source IPs" """, returnStdout: true)
+                        String ret = sh(script: """aws ec2 create-security-group --group-name SSHgroup --description "Security group defining SSH/DB ingress source IPs" """, returnStdout: true)
                         echo "$ret"
                         Map parsedJson = slurper.parseText(ret) as Map
                         def securityGroup = parsedJson.GroupId
 
                         // Configure the singular IP from DDNS value
                         sh "aws ec2 authorize-security-group-ingress --group-name SSHgroup --protocol tcp --port 22 --cidr $IP_ADDRESS/32"
+                        // DB
+                        sh "aws ec2 authorize-security-group-ingress --group-name SSHgroup --protocol tcp --port 3306 --cidr $IP_ADDRESS/32"
 
                         // Attach to EC2
                         sh """aws ec2 modify-instance-attribute --instance-id $INSTANCE_ID --groups "$WEB_SERVER_SG" "$securityGroup" """
