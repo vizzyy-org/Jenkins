@@ -53,7 +53,7 @@ pipeline {
                         // Configure the singular IP from DDNS value
                         sh "aws ec2 authorize-security-group-ingress --group-name SSHgroup --protocol tcp --port 22 --cidr $IP_ADDRESS/32"
                         // DB
-                        sh "aws ec2 authorize-security-group-ingress --group-name SSHgroup --protocol tcp --port 3306 --cidr $IP_ADDRESS/32"
+                        sh "aws ec2 authorize-security-group-ingress --group-name SSHgroup --protocol tcp --port 3306 --cidr 0.0.0.0/0"
 
                         // Attach to EC2
                         sh """aws ec2 modify-instance-attribute --instance-id $INSTANCE_ID --groups "$WEB_SERVER_SG" "$securityGroup" """
