@@ -1,6 +1,4 @@
 #! groovy
-import groovy.json.JsonSlurper
-JsonSlurper slurper = new JsonSlurper()
 
 def IP_ADDRESS
 
@@ -17,7 +15,7 @@ pipeline {
         stage("Grab IP") {
             steps {
                 script {
-
+                    echo "Grabbing ip"
                     withCredentials([string(credentialsId: 'ddns', variable: 'DDNS')]) {
                         String ret = sh(script: "nslookup $DDNS | grep Address", returnStdout: true)
                         echo "$ret"
@@ -35,7 +33,6 @@ pipeline {
         stage("Configure") {
             steps {
                 script {
-
                     withCredentials([string(credentialsId: 'mainEC2', variable: 'INSTANCE_ID'), string(credentialsId: 'WebServerSG', variable: 'WEB_SERVER_SG')]) {
 
                         // Detach from EC2
@@ -47,7 +44,7 @@ pipeline {
                         // Create new security group
                         String ret = sh(script: """aws ec2 create-security-group --group-name SSHgroup --description "Security group defining SSH/DB ingress source IPs" """, returnStdout: true)
                         echo "$ret"
-                        Map parsedJson = slurper.parseText(ret) as Map
+                        def parsedJson = readJSON text: ret
                         def securityGroup = parsedJson.GroupId
 
                         // Configure the singular IP from DDNS value
@@ -65,14 +62,10 @@ pipeline {
     }
     post {
         success {
-            script {
-                sh "echo SUCCESS"
-            }
+            echo "SUCCESS"
         }
         failure {
-            script {
-                sh "echo FAILURE"
-            }
+            echo "FAILURE"
         }
     }
 }
