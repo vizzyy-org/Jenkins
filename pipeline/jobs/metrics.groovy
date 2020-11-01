@@ -33,7 +33,7 @@ pipeline {
                             echo "$host"
                             echo "Element: $i"
                             hostStatus = sh(script: "ssh -q $host exit", returnStatus: true)
-                            echo hostStatus
+                            echo "$hostStatus"
                         }
                         stage("Ping Host"){
                             when {
