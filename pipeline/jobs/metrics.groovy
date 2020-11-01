@@ -51,21 +51,17 @@ def doDynamicParallelSteps(){
 
     for (f in HOSTS) {
         def host = "${f}"
-        echo "Host $host in hosts"
         tasks["$host"] = {
             hostStatus = null
             stage("$host") {
-                echo "$host"
                 String cmd = """
-                            hostname
                             cd ~/metrics
                             git stash
                             git fetch --all
                             git pull origin master
                         """
-                sh("ssh $host '$cmd'")
                 hostStatus = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStatus: true)
-                echo "Returned status: $hostStatus"
+                echo "$host eturned status: $hostStatus"
             }
         }
     }
