@@ -48,8 +48,9 @@ pipeline {
 
 def doDynamicParallelSteps(){
     tasks = [:]
-    for(int i=0; i < HOSTS.size(); i++) {
-        host = HOSTS[i]
+
+    for (f in HOSTS) {
+        def host = "${f}"
         echo "Host $host in hosts"
         tasks["$host"] = {
             hostStatus = null
@@ -67,10 +68,7 @@ def doDynamicParallelSteps(){
                 echo "Returned status: $hostStatus"
             }
         }
-        echo tasks["$host"].toString()
     }
-
-    echo tasks.dump()
 
     parallel tasks
 }
