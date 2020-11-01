@@ -63,7 +63,7 @@ def doDynamicParallelSteps(){
                 hostStatus = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStatus: true)
                 if (hostStatus == 255){
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                        echo "Failed to access $host"
+                        sh "exit 1"
                     }
                 }
             }
