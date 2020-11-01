@@ -51,7 +51,7 @@ def doDynamicParallelSteps(){
     for(int i=0; i < HOSTS.size(); i++) {
         host = HOSTS[i]
         echo "Host $host in hosts"
-        tasks["${host}"] = {
+        tasks["$host"] = {
             hostStatus = null
             stage("$host") {
                 echo "$host"
@@ -67,6 +67,10 @@ def doDynamicParallelSteps(){
                 echo "Returned status: $hostStatus"
             }
         }
+        echo tasks["$host"].toString()
     }
+
+    echo tasks.dump()
+
     parallel tasks
 }
