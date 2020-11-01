@@ -54,6 +54,7 @@ def doDynamicParallelSteps(){
             stage("$host") {
                 echo "$host"
                 String cmd = """
+                            hostname
                             cd ~/metrics
                             git stash
                             git fetch --all
