@@ -26,25 +26,7 @@ pipeline {
             agent any
             steps {
                 script {
-                    for(int i=0; i < HOSTS.size(); i++) {
-                        hostStatus = null
-                        host = HOSTS[i]
-                        stage("Ping $host"){
-                            echo "$host"
-                            echo "Element: $i"
-                            hostStatus = sh(script: "ssh -q $host exit", returnStatus: true)
-                            echo "$hostStatus"
-                        }
-                        stage("Ping Host"){
-                            when {
-                                expression {
-                                    return hostStatus == 0
-                                }
-                            }
-                            echo "Host UP!"
-                            sh "ssh $host 'echo hello; exit'"
-                        }
-                    }
+                    doDynamicParallelSteps()
                 }
             }
         }
@@ -62,4 +44,25 @@ pipeline {
             }
         }
     }
+}
+
+def doDynamicParallelSteps(){
+    for (host in HOSTS) {
+        tasks["${f}"] = {
+            hostStatus = null
+            stage("$host") {
+                echo "$host"
+                String cmd = """
+                            cd ~/metrics
+                            git stash
+                            git fetch --all
+                            git pull origin master
+                        """
+                sh("ssh $host '$cmd'")
+                hostStatus = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStatus: true)
+                echo "Returned status: $hostStatus"
+            }
+        }
+    }
+    parallel tasks
 }
