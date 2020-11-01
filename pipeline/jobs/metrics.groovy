@@ -47,8 +47,9 @@ pipeline {
 }
 
 def doDynamicParallelSteps(){
+    tasks = [:]
     for (host in HOSTS) {
-        tasks["${f}"] = {
+        tasks["${host}"] = {
             hostStatus = null
             stage("$host") {
                 echo "$host"
