@@ -1,4 +1,4 @@
-lan_hosts = [
+lanHosts = [
         'pi@lights.local',
         'pi@summer.local',
         'pi@vox.local',

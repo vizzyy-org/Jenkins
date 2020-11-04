@@ -1,8 +1,10 @@
 #! groovy
 
+@Library('main') _
+
 currentBuild.displayName = "Metrics Pipeline [$currentBuild.number]"
 
-HOSTS = hosts.lan_hosts
+HOSTS = hosts.lanHosts
 
 pipeline {
     agent any
