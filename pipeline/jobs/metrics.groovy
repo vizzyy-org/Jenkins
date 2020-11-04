@@ -4,7 +4,7 @@
 
 currentBuild.displayName = "Metrics Pipeline [$currentBuild.number]"
 
-HOSTS = env.local
+HOSTS = new hosts().local
 
 pipeline {
     agent any
