@@ -1,3 +1,6 @@
+#!Groovy
+
+@NonCPS
 def local() {
     return [
             'pi@lights.local',
