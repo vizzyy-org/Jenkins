@@ -4,7 +4,7 @@
 
 currentBuild.displayName = "Metrics Pipeline [$currentBuild.number]"
 
-HOSTS = hosts.lanHosts
+HOSTS = hosts.local()
 
 pipeline {
     agent any
