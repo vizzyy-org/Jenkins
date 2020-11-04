@@ -1,5 +1,7 @@
-static def local(){
-    return [
+#! groovy
+
+class InnerClass {
+    static String[] local = [
             'pi@lights.local',
             'pi@summer.local',
             'pi@vox.local',
