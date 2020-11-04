@@ -1,6 +1,4 @@
-import groovy.transform.Field
-
-@Field def lanHosts = [
+def lanHosts = [
         'pi@lights.local',
         'pi@summer.local',
         'pi@vox.local',
