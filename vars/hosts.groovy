@@ -2,7 +2,7 @@
 import groovy.transform.Field
 import groovyjarjarantlr.collections.List
 
-@Field List local = [
+@Field List localHosts = [
             'pi@lights.local',
             'pi@summer.local',
             'pi@vox.local',
