@@ -1,6 +1,7 @@
 #! groovy
+import groovyjarjarantlr.collections.List
 
-String[] local = [
+List local = [
         'pi@lights.local',
         'pi@summer.local',
         'pi@vox.local',
