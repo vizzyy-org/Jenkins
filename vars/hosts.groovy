@@ -1,8 +1,8 @@
 #!Groovy
+import groovy.transform.Field
+import groovyjarjarantlr.collections.List
 
-@NonCPS
-def local() {
-    return [
+@Field List local = [
             'pi@lights.local',
             'pi@summer.local',
             'pi@vox.local',
@@ -15,4 +15,3 @@ def local() {
             'pi@four.local',
             'ec2-user@vizzyy.com'
     ]
-}
