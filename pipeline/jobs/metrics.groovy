@@ -4,9 +4,7 @@
 
 currentBuild.displayName = "Metrics Pipeline [$currentBuild.number]"
 
-hostsMap = readJSON file: "../../resources/hosts.json"
-HOSTS = hostsMap["local"]
-echo HOSTS[0]
+def HOSTS
 
 pipeline {
     agent any
@@ -15,8 +13,16 @@ pipeline {
         disableConcurrentBuilds()
     }
     stages {
+        stage('Pull Hosts') {
+            steps {
+                script {
+                    hostsMap = readJSON file: "../../resources/hosts.json"
+                    HOSTS = hostsMap["local"]
+                    echo HOSTS[0]
+                }
+            }
+        }
         stage('Dynamic Stages') {
-            agent any
             steps {
                 script {
                     doDynamicParallelSteps()
