@@ -4,8 +4,6 @@
 
 currentBuild.displayName = "Metrics Pipeline [$currentBuild.number]"
 
-def HOSTS
-
 pipeline {
     agent any
     options {
@@ -13,15 +11,6 @@ pipeline {
         disableConcurrentBuilds()
     }
     stages {
-        stage('Pull Hosts') {
-            steps {
-                script {
-                    hostsMap = readJSON file: "resources/hosts.json"
-                    HOSTS = hostsMap["local"]
-                    echo HOSTS[0]
-                }
-            }
-        }
         stage('Dynamic Stages') {
             steps {
                 script {
@@ -29,7 +18,6 @@ pipeline {
                 }
             }
         }
-
     }
     post {
         success {
@@ -47,6 +35,8 @@ pipeline {
 
 def doDynamicParallelSteps(){
     tasks = [:]
+    hostsMap = readJSON file: "resources/hosts.json"
+    def HOSTS = hostsMap["local"]
 
     for (f in HOSTS) {
         def host = "${f}"
