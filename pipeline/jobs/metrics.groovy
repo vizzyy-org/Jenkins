@@ -4,7 +4,8 @@
 
 currentBuild.displayName = "Metrics Pipeline [$currentBuild.number]"
 
-HOSTS = hosts.hosts
+hostsMap = readJSON file: 'resources/hosts.json'
+HOSTS = hostsMap["local"]
 echo HOSTS[0]
 
 pipeline {
