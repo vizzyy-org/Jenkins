@@ -1,4 +1,5 @@
 import groovy.transform.Field
+import groovyjarjarantlr.collections.List
 
 @Field
 def hosts = ['pi@lights.local',
@@ -12,4 +13,4 @@ def hosts = ['pi@lights.local',
              'pi@carnivore.local',
              'pi@four.local',
              'ec2-user@vizzyy.com'
-    ] as List<String>
+    ] as List
