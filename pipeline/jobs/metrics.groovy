@@ -34,9 +34,9 @@ pipeline {
 }
 
 def doDynamicParallelSteps(){
-    tasks = [:]
-    hostsMap = readJSON file: "resources/hosts.json"
-    def HOSTS = hostsMap["local"]
+    def tasks = [:]
+    def config = readJSON file: "resources/config.json"
+    def HOSTS = config["hosts"]
 
     for (f in HOSTS) {
         def host = "${f}"
@@ -49,7 +49,7 @@ def doDynamicParallelSteps(){
                             git fetch --all
                             git pull origin master
                         """
-                hostStatus = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStatus: true)
+                def hostStatus = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStatus: true)
                 if (hostStatus == 255){
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                         sh "exit 1"

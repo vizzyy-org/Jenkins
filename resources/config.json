@@ -1,5 +1,5 @@
 {
-  "local": ["pi@lights.local",
+  "hosts": ["pi@lights.local",
     "pi@summer.local",
     "pi@vox.local",
     "pi@battery.local",
