@@ -5,7 +5,7 @@
 currentBuild.displayName = "Metrics Pipeline [$currentBuild.number]"
 
 HOSTS = hosts.hosts
-echo HOSTS.properties
+echo HOSTS[0]
 
 pipeline {
     agent any
