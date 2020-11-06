@@ -5,7 +5,7 @@
 currentBuild.displayName = "Metrics Pipeline [$currentBuild.number]"
 
 HOSTS = hosts.hosts.collect()
-echo HOSTS.toString()
+echo HOSTS[0].toString()
 
 pipeline {
     agent any
