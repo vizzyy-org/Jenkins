@@ -36,9 +36,3 @@ def checkoutBranch(ISSUE_NUMBER, repo){
         ])
     }
 }
-
-def test(){
-    def config = readJSON file: "resources/config.json"
-    def HOSTS = config["hosts"]
-    return HOSTS
-}

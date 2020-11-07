@@ -35,10 +35,7 @@ pipeline {
 
 def doDynamicParallelSteps(){
     def tasks = [:]
-    def config = readJSON file: "resources/config.json"
-    def HOSTS = config["hosts"]
-    echo HOSTS[0]
-    def blah = prTools.test()
+    def HOSTS = config.pull("hosts")
     echo blah[0]
 
 
