@@ -37,6 +37,10 @@ def doDynamicParallelSteps(){
     def tasks = [:]
     def config = readJSON file: "resources/config.json"
     def HOSTS = config["hosts"]
+    echo HOSTS[0]
+    def blah = prTools.test()
+    echo blah[0]
+
 
     for (f in HOSTS) {
         def host = "${f}"
