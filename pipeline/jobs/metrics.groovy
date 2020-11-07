@@ -36,8 +36,6 @@ pipeline {
 def doDynamicParallelSteps(){
     def tasks = [:]
     def HOSTS = config.pull("hosts")
-    echo blah[0]
-
 
     for (f in HOSTS) {
         def host = "${f}"
