@@ -9,5 +9,6 @@
     "pi@herbivore.local",
     "pi@carnivore.local",
     "pi@four.local",
-    "ec2-user@vizzyy.com"]
+    "ec2-user@vizzyy.com",
+    "pi@sensor.local"]
 }
