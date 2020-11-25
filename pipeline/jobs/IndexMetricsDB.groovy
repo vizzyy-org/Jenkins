@@ -1,7 +1,6 @@
 #! groovy
 
 currentBuild.displayName = "DB-Indexing Pipeline [$currentBuild.number]"
-boolean dropSucceeded = false
 
 pipeline {
     agent any
@@ -18,11 +17,10 @@ pipeline {
 
                     withCredentials([string(credentialsId: 'db-root-pw', variable: 'PW')]) {
                         String index_query =  "drop index idx_server_metrics_hostname_timestamp_metric_value on server_metrics;"
-                        GString shell_command = """sudo mysql -u root -p$PW -D graphing_data -e "$index_query" """
+                        String shell_command = 'sudo mysql -u root -p$PW -D graphing_data -e "$index_query"'
 
                         try {
                             sh(shell_command)
-                            dropSucceeded = true
                             echo "Index dropped!"
                         } catch (Exception e){
 //                            error("Failed to drop index!")
@@ -34,18 +32,13 @@ pipeline {
         }
 
         stage("Create Index") {
-//            when {
-//                expression {
-//                    return dropSucceeded
-//                }
-//            }
             steps {
                 script {
                     echo "Indexing server-metrics table..."
 
                     withCredentials([string(credentialsId: 'db-root-pw', variable: 'PW')]) {
                         String index_query =  "create index idx_server_metrics_hostname_timestamp_metric_value on server_metrics (hostname, timestamp, metric, value);"
-                        GString shell_command = """sudo mysql -u root -p$PW -D graphing_data -e "$index_query" """
+                        String shell_command = 'sudo mysql -u root -p$PW -D graphing_data -e "$index_query"'
 
                         try {
                             sh(shell_command)
