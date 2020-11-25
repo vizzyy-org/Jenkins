@@ -1,6 +1,7 @@
 #! groovy
 
 currentBuild.displayName = "DB-Indexing Pipeline [$currentBuild.number]"
+boolean dropSucceeded = false
 
 pipeline {
     agent any
@@ -10,14 +11,40 @@ pipeline {
     }
     triggers{ cron('0 5 * * *') } // Every day at 5AM
     stages {
-        stage("Index Database") {
+        stage("Drop Index") {
+            steps {
+                script {
+                    echo "Droping existing index..."
+
+                    withCredentials([string(credentialsId: 'db-root-pw', variable: 'PW')]) {
+                        String index_query =  "drop index idx_server_metrics_hostname_timestamp_metric_value on server_metrics;"
+                        GString shell_command = """sudo mysql -u root -p$PW -D graphing_data -e "$index_query" """
+
+                        try {
+                            sh(shell_command)
+                            dropSucceeded = true
+                            echo "Index dropped!"
+                        } catch (Exception e){
+                            error("Failed to drop index!")
+                        }
+                    }
+                }
+            }
+        }
+
+        stage("Create Index") {
+//            when {
+//                expression {
+//                    return dropSucceeded
+//                }
+//            }
             steps {
                 script {
                     echo "Indexing server-metrics table..."
 
                     withCredentials([string(credentialsId: 'db-root-pw', variable: 'PW')]) {
                         String index_query =  "create index idx_server_metrics_hostname_timestamp_metric_value on server_metrics (hostname, timestamp, metric, value);"
-                        String shell_command = """sudo mysql -u root -p$PW -D graphing_data -e "$index_query" >> ./output.txt"""
+                        GString shell_command = """sudo mysql -u root -p$PW -D graphing_data -e "$index_query" """
 
                         try {
                             sh(shell_command)
