@@ -25,7 +25,8 @@ pipeline {
                             dropSucceeded = true
                             echo "Index dropped!"
                         } catch (Exception e){
-                            error("Failed to drop index!")
+//                            error("Failed to drop index!")
+                            echo "Could not drop index. Does it exist?"
                         }
                     }
                 }
