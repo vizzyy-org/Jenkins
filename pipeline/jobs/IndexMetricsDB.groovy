@@ -17,7 +17,7 @@ pipeline {
 
                     withCredentials([string(credentialsId: 'db-root-pw', variable: 'PW')]) {
                         String index_query =  "drop index idx_server_metrics_hostname_timestamp_metric_value on server_metrics;"
-                        String shell_command = 'sudo mysql -u root -p$PW -D graphing_data -e "$index_query"'
+                        GString shell_command = """sudo mysql -u root -p$PW -D graphing_data -e "$index_query" """
 
                         try {
                             sh(shell_command)
@@ -38,7 +38,7 @@ pipeline {
 
                     withCredentials([string(credentialsId: 'db-root-pw', variable: 'PW')]) {
                         String index_query =  "create index idx_server_metrics_hostname_timestamp_metric_value on server_metrics (hostname, timestamp, metric, value);"
-                        String shell_command = 'sudo mysql -u root -p$PW -D graphing_data -e "$index_query"'
+                        GString shell_command = """sudo mysql -u root -p$PW -D graphing_data -e "$index_query" """
 
                         try {
                             sh(shell_command)
