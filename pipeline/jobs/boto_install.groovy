@@ -47,8 +47,8 @@ def doDynamicParallelSteps(){
                         string(credentialsId: 'metrics_key', variable: 'KEY')
                 ]) {
                     String cmd = """crontab -l | grep python | head -n 1 | grep -oE " /.*/python3\\.?[1-9]?" """
-                    python_path = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStatus: true)
-
+                    def python_path = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStatus: true)
+                    echo "$python_path"
                     cmd = """$python_path -m pip install boto3"""
                     def hostStatus = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStatus: true)
                     if (hostStatus == 255) {
