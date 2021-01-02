@@ -35,7 +35,7 @@ pipeline {
 
 def doDynamicParallelSteps(){
     def tasks = [:]
-    def HOSTS = config.pull("hosts")
+    def HOSTS = config.pull("iam_limited_hosts")
 
     for (f in HOSTS) {
         def host = "${f}"
