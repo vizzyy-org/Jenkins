@@ -46,8 +46,20 @@ def doDynamicParallelSteps(){
                             cd ~/metrics
                             git stash
                             git fetch --all
-                            git pull origin master
+                            git pull origin daemon
                         """
+                if ($host == "2011mbp"){
+                    cmd += """
+                            sudo launchctl stop com.metrics.app
+                            sudo launchctl start com.metrics.app
+                            sudo launchctl list | grep com.metrics.app
+                        """
+                } else {
+                    cmd += """
+                            sudo systemctl restart metrics
+                            sudo systemctl status metrics
+                        """
+                }
                 def hostStatus = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStatus: true)
                 if (hostStatus == 255){
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
