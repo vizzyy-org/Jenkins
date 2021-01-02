@@ -48,15 +48,13 @@ def doDynamicParallelSteps(){
                             git fetch --all
                             git pull origin daemon
                         """
-                if ($host == "2011mbp"){
-                    cmd += """
-                            sudo launchctl stop com.metrics.app
+                if ("$host" == "2011mbp@2011mbp.local"){
+                    cmd += """sudo launchctl stop com.metrics.app
                             sudo launchctl start com.metrics.app
                             sudo launchctl list | grep com.metrics.app
                         """
                 } else {
-                    cmd += """
-                            sudo systemctl restart metrics
+                    cmd += """sudo systemctl restart metrics
                             sudo systemctl status metrics
                         """
                 }
