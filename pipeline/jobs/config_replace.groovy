@@ -44,6 +44,7 @@ def doDynamicParallelSteps(){
             stage("$host") {
                 withCredentials([
                         string(credentialsId: 'grafana_db_user_pw', variable: 'grafana_db_user_pw'),
+                        string(credentialsId: 'DDNS', variable: 'DDNS'),
                 ]) {
 
                     String cmd = """cat ~/metrics/config* | grep ssl_ca"""
@@ -52,7 +53,7 @@ def doDynamicParallelSteps(){
                     def hostname_line = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStdout: true).trim()
                     cmd = """cat ~/metrics/config* | grep DISK_DRIVES"""
                     def drives_line = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStdout: true).trim()
-                    def db_host = hostname_line.contains("dinkleberg") ? "localhost" : "dinkleberg"
+                    def db_host = hostname_line.contains("dinkleberg") ? "localhost" : hostname_line.contains("t4g") ? "$DDNS" : "dinkleberg"
 
                     def configFile = """
 from mysql.connector.constants import ClientFlag
