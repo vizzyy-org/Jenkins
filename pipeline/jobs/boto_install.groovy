@@ -2,7 +2,7 @@
 
 @Library('main') _
 
-currentBuild.displayName = "Metrics Pipeline [$currentBuild.number]"
+currentBuild.displayName = "Boto Install Pipeline [$currentBuild.number]"
 
 pipeline {
     agent any
