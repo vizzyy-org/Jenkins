@@ -44,7 +44,7 @@ def doDynamicParallelSteps(){
             stage("$host") {
                 withCredentials([
                         string(credentialsId: 'grafana_db_user_pw', variable: 'grafana_db_user_pw'),
-                        string(credentialsId: 'DDNS', variable: 'DDNS'),
+                        string(credentialsId: 'ddns', variable: 'DDNS'),
                 ]) {
 
                     String cmd = """cat ~/metrics/config* | grep ssl_ca"""
