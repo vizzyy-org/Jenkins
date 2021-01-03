@@ -65,6 +65,7 @@ SSL_CONFIG = {
     "port": 9004,
     "database": "graphing_data",
     "client_flags": [ClientFlag.SSL],
+    "autocommit": True,
     $ssl_line
 }
 queue_name = "DatabaseMessageQueue"
