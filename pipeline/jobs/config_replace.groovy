@@ -47,11 +47,11 @@ def doDynamicParallelSteps(){
                         string(credentialsId: 'ddns', variable: 'DDNS'),
                 ]) {
 
-                    String cmd = """cat ~/metrics/config* | grep ssl_ca"""
+                    String cmd = """cat ~/metrics/config* | grep ssl_ca | head -n 1"""
                     def ssl_line = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStdout: true).trim()
-                    cmd = """cat ~/metrics/config* | grep HOSTNAME"""
+                    cmd = """cat ~/metrics/config* | grep HOSTNAME | head -n 1"""
                     def hostname_line = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStdout: true).trim()
-                    cmd = """cat ~/metrics/config* | grep DISK_DRIVES"""
+                    cmd = """cat ~/metrics/config* | grep DISK_DRIVES | head -n 1"""
                     def drives_line = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStdout: true).trim()
                     def db_host = hostname_line.contains("dinkleberg") ? "localhost" : hostname_line.contains("t4g") ? "$DDNS" : "dinkleberg.local"
 
