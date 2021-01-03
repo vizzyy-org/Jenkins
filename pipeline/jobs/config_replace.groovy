@@ -76,7 +76,7 @@ $drives_line
 
                     echo "$configFile"
 
-                    def today = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new Date())
+                    def today = new java.text.SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date())
 
                     cmd = """cp ~/metrics/config.py ~/metrics/config.py.bak$today; echo "$configFile" > ~/metrics/config.py"""
 
