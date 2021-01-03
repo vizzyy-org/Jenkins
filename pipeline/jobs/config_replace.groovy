@@ -53,7 +53,7 @@ def doDynamicParallelSteps(){
                     def hostname_line = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStdout: true).trim()
                     cmd = """cat ~/metrics/config* | grep DISK_DRIVES"""
                     def drives_line = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStdout: true).trim()
-                    def db_host = hostname_line.contains("dinkleberg") ? "localhost" : hostname_line.contains("t4g") ? "$DDNS" : "dinkleberg"
+                    def db_host = hostname_line.contains("dinkleberg") ? "localhost" : hostname_line.contains("t4g") ? "$DDNS" : "dinkleberg.local"
 
                     def configFile = """
 from mysql.connector.constants import ClientFlag
