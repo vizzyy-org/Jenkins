@@ -18,7 +18,7 @@ pipeline {
         stage('Dynamic Stages') {
             steps {
                 script {
-                    doDynamicParallelSteps($TARGET_HOSTS)
+                    doDynamicParallelSteps($TARGET_HOSTS, $REMOTE_COMMAND)
                 }
             }
         }
@@ -37,7 +37,7 @@ pipeline {
     }
 }
 
-def doDynamicParallelSteps(hosts){
+def doDynamicParallelSteps(hosts, command){
     def tasks = [:]
     def HOSTS = hosts
     HOSTS = HOSTS.split(',')
@@ -49,7 +49,7 @@ def doDynamicParallelSteps(hosts){
             hostStatus = null
             stage("$host") {
                 String cmd = """
-                        $REMOTE_COMMAND
+                        $command
                     """
                 def hostStatus = sh(script: "ssh  -o ConnectTimeout=3 $host '$cmd'", returnStatus: true)
                 if (hostStatus == 255) {
