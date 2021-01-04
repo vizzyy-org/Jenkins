@@ -18,7 +18,7 @@ pipeline {
         stage('Dynamic Stages') {
             steps {
                 script {
-                    doDynamicParallelSteps()
+                    doDynamicParallelSteps($TARGET_HOSTS)
                 }
             }
         }
@@ -37,9 +37,9 @@ pipeline {
     }
 }
 
-def doDynamicParallelSteps(){
+def doDynamicParallelSteps(hosts){
     def tasks = [:]
-    def HOSTS = $TARGET_HOSTS
+    def HOSTS = hosts
     HOSTS = HOSTS.split(',')
     echo "$HOSTS"
 
