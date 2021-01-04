@@ -18,7 +18,7 @@ pipeline {
         stage('Dynamic Stages') {
             steps {
                 script {
-                    doDynamicParallelSteps($TARGET_HOSTS, $REMOTE_COMMAND)
+                    doDynamicParallelSteps(env.TARGET_HOSTS, env.REMOTE_COMMAND)
                 }
             }
         }
