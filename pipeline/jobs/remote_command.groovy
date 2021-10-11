@@ -11,8 +11,8 @@ pipeline {
         disableConcurrentBuilds()
     }
     parameters {
-        text(name: 'TARGET_HOSTS', defaultValue: 'pi@lights.local,pi@summer.local,pi@vox.local,pi@battery.local,pi@octopi.local,pi@winter1.local,barney@dinkleberg.local,pi@herbivore.local,pi@carnivore.local,pi@four.local,ec2-user@vizzyy.com,pi@sensor.local,pi@tree.local,2011mbp@2011mbp.local', description: '')
-        text(name: 'REMOTE_COMMAND', defaultValue: 'sudo shutdown -r +1', description: '')
+        text(name: 'TARGET_HOSTS', defaultValue: 'pi@lights.local,pi@summer.local,pi@vox.local,pi@winter1.local,pi@herbivore.local,pi@carnivore.local,pi@four.local,pi@sensor.local,pi@tree.local', description: '')
+        text(name: 'REMOTE_COMMAND', defaultValue: 'sudo apt update; sudo apt -y upgrade; sudo shutdown -r +1', description: '')
     }
     stages {
         stage('Dynamic Stages') {
