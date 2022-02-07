@@ -20,6 +20,14 @@ def merge(ISSUE_NUMBER, message, repo){
     }
 }
 
+def checkoutBranch(repo){
+    checkout([
+            $class           : 'GitSCM', branches: [[name: "*/master"]],
+            userRemoteConfigs: [[url          : "git@github.com:"+repo+".git",
+                                 credentialsId: 'jenkins_id_rsa']]
+    ])
+}
+
 def checkoutBranch(ISSUE_NUMBER, repo){
     if(ISSUE_NUMBER) {
         checkout([
